@@ -29,8 +29,8 @@ export class OptionsBuilder {
     return this;
   }
 
-  setExclude(exclude: string[]): OptionsBuilder {
-    this.options.exclude = exclude;
+  setReturning(returning: string[]): OptionsBuilder {
+    this.options.returning = returning;
     return this;
   }
 
