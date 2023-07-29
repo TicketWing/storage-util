@@ -1,0 +1,18 @@
+{
+  "name": "storage-util",
+  "version": "1.0.0",
+  "description": "This repository contains the data store code for the application's services ",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vladyslav Shevyrov <warboyka48@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "ioredis": "^5.3.2",
+    "knex": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.5"
+  }
+}
