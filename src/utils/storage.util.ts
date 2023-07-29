@@ -24,13 +24,13 @@ export class Storage {
     }
   }
 
-  private processExculde<T>(obj: T, exclude: string[] | undefined) {
-    const result: any = { ...obj };
+  private processReturning<T>(obj: T, returning: string[]) {
+    const result: any = {};
 
-    if (exclude) {
-      exclude.forEach((item) => {
-        delete result[item];
-      });
+    for (const field in obj) {
+      if (returning.includes(field)) {
+        result[field] = obj[field];
+      }
     }
 
     return result;
@@ -46,7 +46,7 @@ export class Storage {
     const cached = await this.redis.get<T>(id);
 
     if (!cached) {
-      const query = this.database(this.tableName).select();
+      const query = this.database(this.tableName).where({ id }).select();
       const result = await this.handler(query, "Error in get");
       return result;
     }
@@ -55,35 +55,37 @@ export class Storage {
   }
 
   async insert<T>(data: T, options: Options): Promise<string> {
-    const query = this.database(this.tableName).insert(data).returning("id");
+    const { cacheable, returning } = options;
+    const query = this.database(this.tableName)
+      .insert(data)
+      .returning(returning);
     const inserted = await this.handler(query, "Error in insert");
     const key = inserted[0].id;
 
-    if (options.cacheable) {
-      const cacheableObj = this.processExculde(data, options.exclude);
-      await this.redis.set(key, cacheableObj);
+    if (cacheable) {
+      await this.redis.set(key, inserted[0]);
     }
 
     return key;
   }
 
   async update<T>(data: T, options: Options): Promise<void> {
-    const { key, conditions, exclude } = options;
+    const { key, cacheable, conditions, returning } = options;
     const query = this.database(this.tableName).where(conditions).update(data);
     await this.handler(query, "Error in update");
 
-    if (key) {
-      const cacheable = this.processExculde(data, exclude);
-      await this.redis.update(key, cacheable);
+    if (key && cacheable) {
+      const updations = this.processReturning(data, returning);
+      await this.redis.update(key, updations);
     }
   }
 
   async delete(options: Options): Promise<void> {
-    const { key, conditions } = options;
+    const { key, cacheable, conditions } = options;
     const query = this.database.where(conditions).del();
     await this.handler(query, "Error in delete");
 
-    if (key) {
+    if (key && cacheable) {
       await this.redis.delete(key);
     }
   }

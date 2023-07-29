@@ -5,13 +5,13 @@ export class Options {
   public cacheable: boolean;
   public conditions: Conditions;
   public select: string[];
-  public exclude: string[];
+  public returning: string[];
 
   constructor() {
     this.key = undefined;
     this.cacheable = false;
     this.conditions = {};
     this.select = [];
-    this.exclude = [];
+    this.returning = [];
   }
 }
