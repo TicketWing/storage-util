@@ -1,17 +1,11 @@
-import { Conditions } from "../types/storage.types";
-
-export class Options {
-  public key: string | undefined;
+export class Options<T, U> {
   public cacheable: boolean;
-  public conditions: Conditions;
-  public select: string[];
-  public returning: string[];
+  public cacheOptions: U | undefined;
+  public queries: T;
 
-  constructor() {
-    this.key = undefined;
+  constructor(queries: T) {
     this.cacheable = false;
-    this.conditions = {};
-    this.select = [];
-    this.returning = [];
+    this.cacheOptions = undefined;
+    this.queries = queries;
   }
 }

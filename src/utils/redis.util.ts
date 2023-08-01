@@ -1,40 +1,37 @@
 import { Redis } from "ioredis";
-import { RedisConfig } from "../types/storage.types";
+import { RedisConfig } from "../types/config.types";
+import { CustomError } from "./error.util";
 
 export class RedisUtil {
   private client: Redis;
+  private errCode = 501;
+  private errName = "Redis Error";
 
   constructor(config: RedisConfig) {
     this.client = new Redis(config);
-  }
-
-  stringify<T>(data: T): string {
-    return JSON.stringify(data);
-  }
-
-  parse<T>(data: string): T {
-    return JSON.parse(data);
   }
 
   async get<T>(key: string): Promise<T | null> {
     const data = await this.client.get(key);
 
     if (data) {
-      return this.parse<T>(data);
+      return JSON.parse(data);
     }
 
     return null;
   }
 
   async set<T>(key: string, data: T): Promise<void> {
-    const stringifiedData = this.stringify(data);
+    const stringifiedData = JSON.stringify(data);
     await this.client.set(key, stringifiedData);
   }
 
   async update<I, T>(key: string, data: T): Promise<void> {
     const record = await this.get<any>(key);
 
-    if (!record) return;
+    if (!record) {
+      throw new CustomError(this.errName, "Does not exist", this.errCode);
+    }
 
     for (const field in data) {
       if (record[field] !== undefined) {
@@ -42,7 +39,7 @@ export class RedisUtil {
       }
     }
 
-    await this.set<any>(key, record);
+    await this.set<I>(key, record);
   }
 
   async delete(key: string): Promise<void> {

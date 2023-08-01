@@ -1,13 +1,9 @@
 import { Knex } from "knex";
 
-export type Conditions = {
-  [key: string]: string;
-};
-
 export type RedisConfig = {
   port: number;
   host: string;
-  username: string; // needs Redis >= 6
+  username: string;
   password: string;
   db: number;
 };

@@ -1,40 +1,23 @@
 import { Options } from "../constructors/options.constructor";
-import { Conditions } from "../types/storage.types";
 
-export class OptionsBuilder {
-  private options: Options;
+export class OptionsBuilder<T, U> {
+  private options: Options<T, U>;
 
-  constructor() {
-    this.options = new Options();
+  constructor(queries: T) {
+    this.options = new Options(queries);
   }
 
-  setKey(key: string): OptionsBuilder {
-    this.options.cacheable = true;
-    this.options.key = key;
-    return this;
-  }
-
-  setCacheable(cacheable: boolean): OptionsBuilder {
+  setCacheable(cacheable: boolean): OptionsBuilder<T, U> {
     this.options.cacheable = cacheable;
     return this;
   }
 
-  setConditions(conditions: Conditions): OptionsBuilder {
-    this.options.conditions = conditions;
+  setCacheOptions(options: U): OptionsBuilder<T, U> {
+    this.options.cacheOptions = options;
     return this;
   }
 
-  setSelect(select: string[]): OptionsBuilder {
-    this.options.select = select;
-    return this;
-  }
-
-  setReturning(returning: string[]): OptionsBuilder {
-    this.options.returning = returning;
-    return this;
-  }
-
-  build(): Options {
+  build(): Options<T, U> {
     return this.options;
   }
 }
