@@ -1,10 +1,6 @@
-export type CacheOptions = {
-  keyField: string;
-  cachedFields: string[];
-};
-
 export type GetCacheOptions = {
   cacheKey: string;
+  cachedFields: string[];
 };
 
 export type InsertCacheOptions = {

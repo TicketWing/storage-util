@@ -1,92 +1,61 @@
-import knex, { Knex } from "knex";
-import { RedisUtil } from "./redis.util";
-import { CustomError } from "./error.util";
-import { Options } from "../constructors/options.constructor";
-import { KnexConfig, RedisConfig } from "../types/config.types";
+import {
+  DeleteDBOptions,
+  GetDBOptions,
+  InsertDBOptions,
+  UpdateDBOptions,
+} from "../types/database.types";
 import {
   DeleteCacheOptions,
   GetCacheOptions,
   InsertCacheOptions,
   UpdateCacheOptions,
 } from "../types/cache.types";
-import {
-  DeleteQueries,
-  GetQueries,
-  InsertQueries,
-  UpdateQueries,
-} from "../types/queries.types";
+import { Options } from "../constructors/options.constructor";
+import { CacheUtil } from "./cache.util";
+import { CustomError } from "./error.util";
+import { DatabaseUtil } from "./database.util";
+import { KnexConfig, RedisConfig } from "../types/config.types";
 
 export class Storage {
-  private table: string;
-  private redis: RedisUtil;
-  private errCode = 500;
-  private errName = "Storage Error";
-  private database: Knex<any, unknown[]>;
+  private cache: CacheUtil;
+  private database: DatabaseUtil;
 
   constructor(knexConf: KnexConfig, redisConf: RedisConfig, table: string) {
-    this.table = table;
-    this.database = knex(knexConf);
-    this.redis = new RedisUtil(redisConf);
+    this.cache = new CacheUtil(redisConf);
+    this.database = new DatabaseUtil(knexConf, table);
   }
 
-  private async handler<T>(promise: Promise<T>, msg: string): Promise<T> {
-    try {
-      const result = await promise;
-      return result;
-    } catch (error) {
-      throw new CustomError(this.errName, msg, this.errCode);
-    }
-  }
+  async get(options: Options<GetDBOptions, GetCacheOptions>): Promise<any[]> {
+    const { dbOptions, cacheable, cacheOptions } = options;
 
-  private includeInCache<T>(obj: T, fields: string[]) {
-    const result: any = {};
+    if (cacheable && cacheOptions) {
+      let instance = await this.cache.get(cacheOptions);
 
-    for (const field in obj) {
-      if (fields.includes(field)) {
-        result[field] = obj[field];
+      if (!instance) {
+        const { cachedFields } = cacheOptions;
+        instance = await this.database.get(dbOptions);
+        await this.cache.set(instance, { keyField: "id", cachedFields });
       }
+      return instance;
     }
 
-    return result;
-  }
-
-  async get(options: Options<GetQueries, GetCacheOptions>): Promise<any[]> {
-    const { select, where } = options.queries;
-    const response = await this.database.where(where).select(...select);
-    return response;
-  }
-
-  async getCache<T>(id: string) {
-    const cached = await this.redis.get<T>(id);
-
-    if (!cached) {
-      const query = this.database(this.table).where({ id }).select();
-      const result = await this.handler(query, "GET Error");
-      return result;
-    }
-
-    return cached;
+    const record = await this.database.get(dbOptions);
+    return record;
   }
 
   async insert<T>(
     data: T,
-    options: Options<InsertQueries, InsertCacheOptions>
+    options: Options<InsertDBOptions, InsertCacheOptions>
   ): Promise<string> {
-    const { returning } = options.queries;
-    const query = this.database(this.table).insert(data).returning(returning);
-    const inserted = await this.handler(query, "INSERT Error");
-    const value = inserted[0];
+    const { cacheable, cacheOptions, dbOptions } = options;
+    const value = await this.database.insert<T>(data, dbOptions);
 
-    if (options.cacheable && options.cacheOptions) {
-      const { keyField, cachedFields } = options.cacheOptions;
-
-      if (!returning.includes(keyField)) {
-        throw new CustomError(this.errName, "Missed key", this.errCode);
+    if (cacheable && cacheOptions) {
+      if (!dbOptions.returning.includes(cacheOptions.keyField)) {
+        throw new CustomError("Cache Error", "Missed key", 501);
       }
 
-      const key = value[keyField];
-      const cached = this.includeInCache(value, cachedFields);
-      await this.redis.set(key, cached);
+      await this.cache.set(value, cacheOptions);
     }
 
     return value.id || null;
@@ -94,29 +63,24 @@ export class Storage {
 
   async update<T>(
     data: T,
-    options: Options<UpdateQueries, UpdateCacheOptions>
+    options: Options<UpdateDBOptions, UpdateCacheOptions>
   ): Promise<void> {
-    const { where } = options.queries;
-    const query = this.database(this.table).where(where).update(data);
-    await this.handler(query, "UPDATE Error");
+    const { dbOptions, cacheable, cacheOptions } = options;
+    await this.database.update(data, dbOptions);
 
-    if (options.cacheable && options.cacheOptions) {
-      const { cacheKey, updatingFields } = options.cacheOptions;
-      const updations = this.includeInCache(data, updatingFields);
-      await this.redis.update(cacheKey, updations);
+    if (cacheable && cacheOptions) {
+      await this.cache.update(data, cacheOptions);
     }
   }
 
   async delete(
-    options: Options<DeleteQueries, DeleteCacheOptions>
+    options: Options<DeleteDBOptions, DeleteCacheOptions>
   ): Promise<void> {
-    const { where } = options.queries;
-    const query = this.database.where(where).del();
-    await this.handler(query, "DELETE Error");
+    const { cacheable, cacheOptions, dbOptions } = options;
+    await this.database.delete(dbOptions);
 
-    if (options.cacheable && options.cacheOptions) {
-      const { cacheKey } = options.cacheOptions;
-      await this.redis.delete(cacheKey);
+    if (cacheable && cacheOptions) {
+      await this.cache.delete(cacheOptions);
     }
   }
 }

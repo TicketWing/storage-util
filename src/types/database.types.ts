@@ -2,23 +2,23 @@ export type WhereClause = {
   [key: string]: string;
 };
 
-export type SelectQuery = string[];
+export type Selectoption = string[];
 
 export type ReturningMethod = string[];
 
-export type GetQueries = {
+export type GetDBOptions= {
   where: WhereClause;
-  select: SelectQuery;
+  select: Selectoption;
 };
 
-export type InsertQueries = {
+export type InsertDBOptions= {
   returning: ReturningMethod;
 };
 
-export type UpdateQueries = {
+export type UpdateDBOptions= {
   where: WhereClause;
 };
 
-export type DeleteQueries = {
+export type DeleteDBOptions= {
   where: WhereClause;
 };

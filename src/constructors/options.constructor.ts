@@ -1,11 +1,11 @@
 export class Options<T, U> {
   public cacheable: boolean;
   public cacheOptions: U | undefined;
-  public queries: T;
+  public dbOptions: T;
 
-  constructor(queries: T) {
+  constructor(dbOptions: T) {
     this.cacheable = false;
     this.cacheOptions = undefined;
-    this.queries = queries;
+    this.dbOptions = dbOptions;
   }
 }
