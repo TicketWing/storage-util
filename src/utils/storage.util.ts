@@ -45,7 +45,7 @@ export class Storage {
 
   async insert<T>(
     data: T,
-    options: Options<InsertDBOptions, InsertCacheOptions>
+    options: Options<InsertDBOptions, InsertCacheOptions | undefined>
   ): Promise<string> {
     const { cacheOptions, dbOptions } = options;
     const value = await this.database.insert<T>(data, dbOptions);
@@ -63,7 +63,7 @@ export class Storage {
 
   async update<T>(
     data: T,
-    options: Options<UpdateDBOptions, UpdateCacheOptions>
+    options: Options<UpdateDBOptions, UpdateCacheOptions | undefined>
   ): Promise<void> {
     const { dbOptions, cacheOptions } = options;
     await this.database.update(data, dbOptions);
@@ -74,7 +74,7 @@ export class Storage {
   }
 
   async delete(
-    options: Options<DeleteDBOptions, DeleteCacheOptions>
+    options: Options<DeleteDBOptions, DeleteCacheOptions | undefined>
   ): Promise<void> {
     const { cacheOptions, dbOptions } = options;
     await this.database.delete(dbOptions);
