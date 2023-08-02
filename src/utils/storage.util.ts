@@ -25,7 +25,7 @@ export class Storage {
     this.database = new DatabaseUtil(knexConf, table);
   }
 
-  async get(options: Options<GetDBOptions, GetCacheOptions>): Promise<any[]> {
+  async get(options: Options<GetDBOptions, GetCacheOptions | undefined>): Promise<any[]> {
     const { dbOptions, cacheOptions } = options;
 
     if (cacheOptions) {
