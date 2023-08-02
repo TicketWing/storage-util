@@ -26,9 +26,9 @@ export class Storage {
   }
 
   async get(options: Options<GetDBOptions, GetCacheOptions>): Promise<any[]> {
-    const { dbOptions, cacheable, cacheOptions } = options;
+    const { dbOptions, cacheOptions } = options;
 
-    if (cacheable && cacheOptions) {
+    if (cacheOptions) {
       let instance = await this.cache.get(cacheOptions);
 
       if (!instance) {
@@ -47,10 +47,10 @@ export class Storage {
     data: T,
     options: Options<InsertDBOptions, InsertCacheOptions>
   ): Promise<string> {
-    const { cacheable, cacheOptions, dbOptions } = options;
+    const { cacheOptions, dbOptions } = options;
     const value = await this.database.insert<T>(data, dbOptions);
 
-    if (cacheable && cacheOptions) {
+    if (cacheOptions) {
       if (!dbOptions.returning.includes(cacheOptions.keyField)) {
         throw new CustomError("Cache Error", "Missed key", 501);
       }
@@ -65,10 +65,10 @@ export class Storage {
     data: T,
     options: Options<UpdateDBOptions, UpdateCacheOptions>
   ): Promise<void> {
-    const { dbOptions, cacheable, cacheOptions } = options;
+    const { dbOptions, cacheOptions } = options;
     await this.database.update(data, dbOptions);
 
-    if (cacheable && cacheOptions) {
+    if (cacheOptions) {
       await this.cache.update(data, cacheOptions);
     }
   }
@@ -76,10 +76,10 @@ export class Storage {
   async delete(
     options: Options<DeleteDBOptions, DeleteCacheOptions>
   ): Promise<void> {
-    const { cacheable, cacheOptions, dbOptions } = options;
+    const { cacheOptions, dbOptions } = options;
     await this.database.delete(dbOptions);
 
-    if (cacheable && cacheOptions) {
+    if (cacheOptions) {
       await this.cache.delete(cacheOptions);
     }
   }

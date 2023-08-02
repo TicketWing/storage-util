@@ -7,11 +7,6 @@ export class OptionsBuilder<T, U> {
     this.options = new Options(queries);
   }
 
-  setCacheable(cacheable: boolean): OptionsBuilder<T, U> {
-    this.options.cacheable = cacheable;
-    return this;
-  }
-
   setCacheOptions(options: U): OptionsBuilder<T, U> {
     this.options.cacheOptions = options;
     return this;
