@@ -4,6 +4,7 @@ export declare class RedisUtil {
     private errCode;
     private errName;
     constructor(client: Redis);
+    private init;
     get<T>(key: string): Promise<T | null>;
     set<T>(key: string, data: T): Promise<void>;
     update<I, T>(key: string, data: T): Promise<void>;
