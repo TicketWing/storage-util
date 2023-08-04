@@ -1,10 +1,10 @@
+import { Redis } from "ioredis";
 import { DeleteCacheOptions, GetCacheOptions, InsertCacheOptions, UpdateCacheOptions } from "../types/cache.types";
-import { RedisConfig } from "../types/config.types";
 export declare class CacheUtil {
     private redis;
     private errCode;
     private errName;
-    constructor(config: RedisConfig);
+    constructor(client: Redis);
     private handler;
     private includeInCache;
     get(options: GetCacheOptions): Promise<any>;

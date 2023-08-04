@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RedisUtil = void 0;
-const ioredis_1 = require("ioredis");
 const error_util_1 = require("./error.util");
 class RedisUtil {
     client;
     errCode = 501;
     errName = "Redis Error";
-    constructor(config) {
-        this.client = new ioredis_1.Redis(config);
+    constructor(client) {
+        this.client = client;
     }
     async get(key) {
         const data = await this.client.get(key);

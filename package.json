@@ -1,6 +1,6 @@
 {
   "name": "ticketwing-storage-util",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "This repository contains the data store code for the application's services ",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

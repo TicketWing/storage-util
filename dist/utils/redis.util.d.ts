@@ -1,9 +1,9 @@
-import { RedisConfig } from "../types/config.types";
+import { Redis } from "ioredis";
 export declare class RedisUtil {
     private client;
     private errCode;
     private errName;
-    constructor(config: RedisConfig);
+    constructor(client: Redis);
     get<T>(key: string): Promise<T | null>;
     set<T>(key: string, data: T): Promise<void>;
     update<I, T>(key: string, data: T): Promise<void>;

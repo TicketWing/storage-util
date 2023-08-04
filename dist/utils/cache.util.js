@@ -7,8 +7,8 @@ class CacheUtil {
     redis;
     errCode = 500;
     errName = "Redis Error";
-    constructor(config) {
-        this.redis = new redis_util_1.RedisUtil(config);
+    constructor(client) {
+        this.redis = new redis_util_1.RedisUtil(client);
     }
     async handler(promise, msg) {
         try {

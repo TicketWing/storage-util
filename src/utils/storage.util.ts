@@ -14,15 +14,15 @@ import { Options } from "../constructors/options.constructor";
 import { CacheUtil } from "./cache.util";
 import { CustomError } from "./error.util";
 import { DatabaseUtil } from "./database.util";
-import { RedisConfig } from "../types/config.types";
 import { Knex } from "knex";
+import { Redis } from "ioredis";
 
 export class Storage {
   private cache: CacheUtil;
   private database: DatabaseUtil;
 
-  constructor(pool: Knex, redisConf: RedisConfig, table: string) {
-    this.cache = new CacheUtil(redisConf);
+  constructor(pool: Knex, client: Redis, table: string) {
+    this.cache = new CacheUtil(client);
     this.database = new DatabaseUtil(pool, table);
   }
 

@@ -7,8 +7,8 @@ const database_util_1 = require("./database.util");
 class Storage {
     cache;
     database;
-    constructor(pool, redisConf, table) {
-        this.cache = new cache_util_1.CacheUtil(redisConf);
+    constructor(pool, client, table) {
+        this.cache = new cache_util_1.CacheUtil(client);
         this.database = new database_util_1.DatabaseUtil(pool, table);
     }
     async get(options) {

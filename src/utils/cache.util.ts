@@ -1,10 +1,10 @@
+import { Redis } from "ioredis";
 import {
   DeleteCacheOptions,
   GetCacheOptions,
   InsertCacheOptions,
   UpdateCacheOptions,
 } from "../types/cache.types";
-import { RedisConfig } from "../types/config.types";
 import { CustomError } from "./error.util";
 import { RedisUtil } from "./redis.util";
 
@@ -13,8 +13,8 @@ export class CacheUtil {
   private errCode = 500;
   private errName = "Redis Error";
 
-  constructor(config: RedisConfig) {
-    this.redis = new RedisUtil(config);
+  constructor(client: Redis) {
+    this.redis = new RedisUtil(client);
   }
 
   private async handler<T>(promise: Promise<T>, msg: string): Promise<T> {

@@ -1,5 +1,4 @@
 import { Redis } from "ioredis";
-import { RedisConfig } from "../types/config.types";
 import { CustomError } from "./error.util";
 
 export class RedisUtil {
@@ -7,8 +6,8 @@ export class RedisUtil {
   private errCode = 501;
   private errName = "Redis Error";
 
-  constructor(config: RedisConfig) {
-    this.client = new Redis(config);
+  constructor(client: Redis) {
+    this.client = client;
   }
 
   async get<T>(key: string): Promise<T | null> {
