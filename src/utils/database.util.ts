@@ -1,5 +1,4 @@
-import knex, { Knex } from "knex";
-import { KnexConfig } from "../types/config.types";
+import { Knex } from "knex";
 import {
   DeleteDBOptions,
   GetDBOptions,
@@ -14,8 +13,8 @@ export class DatabaseUtil {
   private errCode = 501;
   private database: Knex;
 
-  constructor(config: KnexConfig, table: string) {
-    this.database = knex(config);
+  constructor(pool: Knex, table: string) {
+    this.database = pool;
     this.table = table;
   }
 

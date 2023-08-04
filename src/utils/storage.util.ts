@@ -14,18 +14,21 @@ import { Options } from "../constructors/options.constructor";
 import { CacheUtil } from "./cache.util";
 import { CustomError } from "./error.util";
 import { DatabaseUtil } from "./database.util";
-import { KnexConfig, RedisConfig } from "../types/config.types";
+import { RedisConfig } from "../types/config.types";
+import { Knex } from "knex";
 
 export class Storage {
   private cache: CacheUtil;
   private database: DatabaseUtil;
 
-  constructor(knexConf: KnexConfig, redisConf: RedisConfig, table: string) {
+  constructor(pool: Knex, redisConf: RedisConfig, table: string) {
     this.cache = new CacheUtil(redisConf);
-    this.database = new DatabaseUtil(knexConf, table);
+    this.database = new DatabaseUtil(pool, table);
   }
 
-  async get(options: Options<GetDBOptions, GetCacheOptions | undefined>): Promise<any[]> {
+  async get(
+    options: Options<GetDBOptions, GetCacheOptions | undefined>
+  ): Promise<any[]> {
     const { dbOptions, cacheOptions } = options;
 
     if (cacheOptions) {
