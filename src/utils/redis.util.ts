@@ -1,33 +1,14 @@
 import { Redis } from "ioredis";
 import { CustomError } from "./error.util";
-import { failedStatuses, successStatuses } from "../consts/redis.consts";
 
 export class RedisUtil {
   private client: Redis | undefined;
   private errCode = 501;
   private errName = "Redis Error";
-  private success = successStatuses;
-  private fail = failedStatuses;
 
-  constructor(client: Redis) {
-    this.init(client);
-  }
-
-  private checkConnection(client: Redis): boolean {
-    if (this.success.includes(client.status)) {
-      return true;
-    }
-    return false;
-  }
-
-  private async init(client: Redis) {
-    const isConnected = this.checkConnection(client);
-
-    if (!isConnected) {
-      await client.connect();
-    }
-
+  init(client: Redis) {
     this.client = client;
+    return this;
   }
 
   async get<T>(key: string): Promise<T | null> {

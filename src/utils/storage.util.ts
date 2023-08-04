@@ -22,7 +22,7 @@ export class Storage {
   private database: DatabaseUtil;
 
   constructor(pool: Knex, client: Redis, table: string) {
-    this.cache = new CacheUtil(client);
+    this.cache = new CacheUtil(client)
     this.database = new DatabaseUtil(pool, table);
   }
 

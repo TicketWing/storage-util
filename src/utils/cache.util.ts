@@ -14,7 +14,7 @@ export class CacheUtil {
   private errName = "Redis Error";
 
   constructor(client: Redis) {
-    this.redis = new RedisUtil(client);
+    this.redis = new RedisUtil().init(client);
   }
 
   private async handler<T>(promise: Promise<T>, msg: string): Promise<T> {
