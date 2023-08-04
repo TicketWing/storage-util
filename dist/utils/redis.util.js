@@ -2,15 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RedisUtil = void 0;
 const error_util_1 = require("./error.util");
+const redis_consts_1 = require("../consts/redis.consts");
 class RedisUtil {
     client;
     errCode = 501;
     errName = "Redis Error";
+    success = redis_consts_1.successStatuses;
+    fail = redis_consts_1.failedStatuses;
     constructor(client) {
         this.init(client);
     }
+    checkConnection(client) {
+        if (this.success.includes(client.status)) {
+            return true;
+        }
+        return false;
+    }
     async init(client) {
-        await client.connect();
+        const isConnected = this.checkConnection(client);
+        if (!isConnected) {
+            await client.connect();
+        }
         this.client = client;
     }
     async get(key) {
