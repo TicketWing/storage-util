@@ -1,15 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseUtil = void 0;
-const knex_1 = require("knex");
 const error_util_1 = require("./error.util");
 class DatabaseUtil {
     table;
     errName = "Database";
     errCode = 501;
     database;
-    constructor(config, table) {
-        this.database = (0, knex_1.default)(config);
+    constructor(pool, table) {
+        this.database = pool;
         this.table = table;
     }
     async handler(promise, msg) {
