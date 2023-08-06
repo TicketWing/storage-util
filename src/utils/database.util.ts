@@ -38,8 +38,8 @@ export class DatabaseUtil {
 
   async insert<T>(data: T, options: InsertDBOptions): Promise<any> {
     const query = this.database(this.table)
-      .insert(data)
-      .returning(options.returning);
+      .returning(options.returning || ['id'])
+      .insert(data);
     const inserted = await this.handler(query, "INSERT Error");
     return inserted[0];
   }
