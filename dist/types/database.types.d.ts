@@ -1,18 +1,18 @@
-export type WhereClause = {
+export declare type WhereClause = {
     [key: string]: string;
 };
-export type Selectoption = string[];
-export type ReturningMethod = string[];
-export type GetDBOptions = {
+export declare type Selectoption = string[];
+export declare type ReturningMethod = string[];
+export declare type GetDBOptions = {
     where: WhereClause;
     select: Selectoption;
 };
-export type InsertDBOptions = {
+export declare type InsertDBOptions = {
     returning: ReturningMethod;
 };
-export type UpdateDBOptions = {
+export declare type UpdateDBOptions = {
     where: WhereClause;
 };
-export type DeleteDBOptions = {
+export declare type DeleteDBOptions = {
     where: WhereClause;
 };

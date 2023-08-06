@@ -1,15 +1,15 @@
-export type GetCacheOptions = {
+export declare type GetCacheOptions = {
     cacheKey: string;
     cachedFields: string[];
 };
-export type InsertCacheOptions = {
+export declare type InsertCacheOptions = {
     keyField: string;
     cachedFields: string[];
 };
-export type UpdateCacheOptions = {
+export declare type UpdateCacheOptions = {
     cacheKey: string;
     updatingFields: string[];
 };
-export type DeleteCacheOptions = {
+export declare type DeleteCacheOptions = {
     cacheKey: string;
 };

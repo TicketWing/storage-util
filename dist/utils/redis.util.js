@@ -6,14 +6,10 @@ class RedisUtil {
     client;
     errCode = 501;
     errName = "Redis Error";
-    init(client) {
+    constructor(client) {
         this.client = client;
-        return this;
     }
     async get(key) {
-        if (!this.client) {
-            throw new error_util_1.CustomError(this.errName, "Client error", this.errCode);
-        }
         const data = await this.client.get(key);
         if (data) {
             return JSON.parse(data);
@@ -21,16 +17,10 @@ class RedisUtil {
         return null;
     }
     async set(key, data) {
-        if (!this.client) {
-            throw new error_util_1.CustomError(this.errName, "Client error", this.errCode);
-        }
         const stringifiedData = JSON.stringify(data);
         await this.client.set(key, stringifiedData);
     }
     async update(key, data) {
-        if (!this.client) {
-            throw new error_util_1.CustomError(this.errName, "Client error", this.errCode);
-        }
         const record = await this.get(key);
         if (!record) {
             throw new error_util_1.CustomError(this.errName, "Does not exist", this.errCode);
@@ -43,9 +33,6 @@ class RedisUtil {
         await this.set(key, record);
     }
     async delete(key) {
-        if (!this.client) {
-            throw new error_util_1.CustomError(this.errName, "Client error", this.errCode);
-        }
         await this.client.del(key);
     }
 }

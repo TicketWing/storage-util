@@ -29,7 +29,9 @@ export class DatabaseUtil {
 
   async get(options: GetDBOptions) {
     const { select, where } = options;
-    const query = this.database.where(where).select(...select);
+    const query = this.database(this.table)
+      .select(...select)
+      .where(where);
     const record = await this.handler(query, "GET Error");
     return record[0];
   }
@@ -48,7 +50,7 @@ export class DatabaseUtil {
   }
 
   async delete(options: DeleteDBOptions) {
-    const query = this.database.where(options.where).del();
+    const query = this.database(this.table).where(options.where).del();
     await this.handler(query, "DELETE Error");
   }
 }
