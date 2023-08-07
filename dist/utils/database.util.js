@@ -30,8 +30,8 @@ class DatabaseUtil {
     }
     async insert(data, options) {
         const query = this.database(this.table)
-            .insert(data)
-            .returning(options.returning);
+            .returning(options.returning || ['id'])
+            .insert(data);
         const inserted = await this.handler(query, "INSERT Error");
         return inserted[0];
     }

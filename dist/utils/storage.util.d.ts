@@ -7,7 +7,7 @@ export declare class Storage {
     private cache;
     private database;
     constructor(pool: Knex, client: Redis, table: string);
-    get(options: Options<GetDBOptions, GetCacheOptions | undefined>): Promise<any[]>;
+    get(options: Options<GetDBOptions, GetCacheOptions | undefined>): Promise<any>;
     insert<T>(data: T, options: Options<InsertDBOptions, InsertCacheOptions | undefined>): Promise<string>;
     update<T>(data: T, options: Options<UpdateDBOptions, UpdateCacheOptions | undefined>): Promise<void>;
     delete(options: Options<DeleteDBOptions, DeleteCacheOptions | undefined>): Promise<void>;
