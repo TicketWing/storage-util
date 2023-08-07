@@ -22,13 +22,13 @@ export class Storage {
   private database: DatabaseUtil;
 
   constructor(pool: Knex, client: Redis, table: string) {
-    this.cache = new CacheUtil(client)
+    this.cache = new CacheUtil(client);
     this.database = new DatabaseUtil(pool, table);
   }
 
   async get(
     options: Options<GetDBOptions, GetCacheOptions | undefined>
-  ): Promise<any[]> {
+  ): Promise<any> {
     const { dbOptions, cacheOptions } = options;
 
     if (cacheOptions) {
