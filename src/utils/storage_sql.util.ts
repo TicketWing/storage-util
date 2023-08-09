@@ -17,7 +17,7 @@ import { DatabaseUtil } from "./database.util";
 import { Knex } from "knex";
 import { Redis } from "ioredis";
 
-export class Storage {
+export class CacheableSQLStorage {
   private cache: CacheUtil;
   private database: DatabaseUtil;
 

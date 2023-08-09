@@ -1,4 +1,4 @@
-export class CustomError extends Error {
+export class ErrorConstructor extends Error {
   public name: string;
   public message: string;
   public code: number;

@@ -10,6 +10,10 @@ export {
   DeleteCacheOptions,
   UpdateCacheOptions,
 } from "./types/cache.types";
+export { Identification } from "./types/middlewares.types";
 
-export { Storage } from "./utils/storage.util";
+export { CacheableSQLStorage } from "./utils/storage_sql.util";
 export { OptionsBuilder } from "./utils/options.util";
+export { validate } from "./middlewares/validate.middleware";
+export { errorMiddleware } from "./middlewares/error.middleware";
+export { authenticate } from "./middlewares/auth.middleware";

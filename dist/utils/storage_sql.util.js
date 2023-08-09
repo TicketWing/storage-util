@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Storage = void 0;
+exports.CacheableSQLStorage = void 0;
 const cache_util_1 = require("./cache.util");
 const error_util_1 = require("./error.util");
 const database_util_1 = require("./database.util");
-class Storage {
+class CacheableSQLStorage {
     cache;
     database;
     constructor(pool, client, table) {
@@ -51,4 +51,4 @@ class Storage {
         }
     }
 }
-exports.Storage = Storage;
+exports.CacheableSQLStorage = CacheableSQLStorage;

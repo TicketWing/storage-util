@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CustomError = void 0;
-class CustomError extends Error {
+exports.ErrorConstructor = void 0;
+class ErrorConstructor extends Error {
     name;
     message;
     code;
@@ -14,4 +14,4 @@ class CustomError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-exports.CustomError = CustomError;
+exports.ErrorConstructor = ErrorConstructor;

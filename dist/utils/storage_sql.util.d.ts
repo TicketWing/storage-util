@@ -3,7 +3,7 @@ import { DeleteCacheOptions, GetCacheOptions, InsertCacheOptions, UpdateCacheOpt
 import { Options } from "../constructors/options.constructor";
 import { Knex } from "knex";
 import { Redis } from "ioredis";
-export declare class Storage {
+export declare class CacheableSQLStorage {
     private cache;
     private database;
     constructor(pool: Knex, client: Redis, table: string);
