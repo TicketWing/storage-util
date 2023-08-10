@@ -1,56 +1,55 @@
-import { Knex } from "knex";
+import mongoose from "mongoose";
+import { ErrorHandler } from "./error-handler.util";
 import {
   DeleteDBOptions,
   GetDBOptions,
   InsertDBOptions,
   UpdateDBOptions,
 } from "../types/database.types";
-import { ErrorConstructor } from "../constructors/error.constructor";
 
-export class NoSQLDatabaseUtil {
-  private table: string;
-  private errName = "Database";
-  private errCode = 501;
-  private database: Knex;
+export class NoSQLDatabaseUtil extends ErrorHandler {
+  private model: mongoose.Model<any>;
 
-  constructor(pool: Knex, table: string) {
-    this.database = pool;
-    this.table = table;
+  constructor(model: mongoose.Model<any>) {
+    super("Database", 501);
+    this.model = model;
   }
 
-  private async handler<T>(promise: Promise<T>, msg: string): Promise<T> {
-    try {
-      const result = await promise;
-      return result;
-    } catch (error) {
-      throw new ErrorConstructor(this.errName, msg, this.errCode);
+  private returning<T>(obj: T, fields: string[]) {
+    const result: any = {};
+
+    for (const field in obj) {
+      if (fields.includes(field)) {
+        result[field] = obj[field];
+      }
     }
+
+    return result;
   }
 
   async get(options: GetDBOptions) {
     const { select, where } = options;
-    const query = this.database(this.table)
-      .select(...select)
-      .where(where);
-    const record = await this.handler(query, "GET Error");
-    return record[0];
+    const record = await this.model.findOne(where).select(select);
+    return record;
   }
 
-  async insert<T>(data: T, options: InsertDBOptions): Promise<any> {
-    const query = this.database(this.table)
-      .returning(options.returning || ['id'])
-      .insert(data);
+  async insert<T>(data: T, options: InsertDBOptions) {
+    const { returning } = options;
+    const query = this.model.create(data);
     const inserted = await this.handler(query, "INSERT Error");
-    return inserted[0];
+    const sorted = this.returning(inserted, returning);
+    return sorted;
   }
 
-  async update<T>(data: T, options: UpdateDBOptions): Promise<void> {
-    const query = this.database(this.table).where(options.where).update(data);
-    await this.handler(query, "UPDATE Error");
+  async update<T>(data: T, options: UpdateDBOptions) {
+    const update = { $set: data as any };
+    const query = this.model.findOneAndUpdate<T>(options.where, update);
+    const result = await this.handler(query, "UPDATE Error");
+    return result;
   }
 
   async delete(options: DeleteDBOptions) {
-    const query = this.database(this.table).where(options.where).del();
+    const query = this.model.findOneAndDelete(options.where);
     await this.handler(query, "DELETE Error");
   }
 }

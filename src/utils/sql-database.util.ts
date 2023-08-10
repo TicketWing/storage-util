@@ -9,17 +9,17 @@ import { ErrorHandler } from "./error-handler.util";
 
 export class SQLDatabaseUtil extends ErrorHandler {
   private table: string;
-  private database: Knex;
+  private pool: Knex;
 
   constructor(pool: Knex, table: string) {
     super("Database", 501);
-    this.database = pool;
+    this.pool = pool;
     this.table = table;
   }
 
   async get(options: GetDBOptions) {
     const { select, where } = options;
-    const query = this.database(this.table)
+    const query = this.pool(this.table)
       .select(...select)
       .where(where);
     const record = await this.handler(query, "GET Error");
@@ -27,7 +27,7 @@ export class SQLDatabaseUtil extends ErrorHandler {
   }
 
   async insert<T>(data: T, options: InsertDBOptions): Promise<any> {
-    const query = this.database(this.table)
+    const query = this.pool(this.table)
       .returning(options.returning || ["id"])
       .insert(data);
     const inserted = await this.handler(query, "INSERT Error");
@@ -35,12 +35,12 @@ export class SQLDatabaseUtil extends ErrorHandler {
   }
 
   async update<T>(data: T, options: UpdateDBOptions): Promise<void> {
-    const query = this.database(this.table).where(options.where).update(data);
+    const query = this.pool(this.table).where(options.where).update(data);
     await this.handler(query, "UPDATE Error");
   }
 
   async delete(options: DeleteDBOptions) {
-    const query = this.database(this.table).where(options.where).del();
+    const query = this.pool(this.table).where(options.where).del();
     await this.handler(query, "DELETE Error");
   }
 }
