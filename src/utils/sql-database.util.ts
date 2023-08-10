@@ -1,5 +1,6 @@
 import { Knex } from "knex";
 import {
+  DatabaseUtil,
   DeleteDBOptions,
   GetDBOptions,
   InsertDBOptions,
@@ -7,7 +8,7 @@ import {
 } from "../types/database.types";
 import { ErrorHandler } from "./error-handler.util";
 
-export class SQLDatabaseUtil extends ErrorHandler {
+export class SQLDatabaseUtil extends ErrorHandler implements DatabaseUtil {
   private table: string;
   private pool: Knex;
 

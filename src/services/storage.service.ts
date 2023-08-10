@@ -1,4 +1,5 @@
 import {
+  DatabaseUtil,
   DeleteDBOptions,
   GetDBOptions,
   InsertDBOptions,
@@ -16,15 +17,22 @@ import { Options } from "../types/options.types";
 import { CacheUtil } from "../utils/cache.util";
 import { SQLDatabaseUtil } from "../utils/sql-database.util";
 import { ErrorConstructor } from "../constructors/error.constructor";
-
+import { NoSQLDatabaseUtil } from "../utils/nosql-database.util";
+import { Model } from "mongoose";
 
 export class CacheableSQLStorage {
   private cache: CacheUtil;
-  private database: SQLDatabaseUtil;
+  private database: DatabaseUtil; 
 
-  constructor(pool: Knex, client: Redis, table: string) {
+  constructor(
+    pool: Knex | Model<any>,
+    client: Redis,
+    table: string | undefined = undefined
+  ) {
     this.cache = new CacheUtil(client);
-    this.database = new SQLDatabaseUtil(pool, table);
+    this.database = table
+      ? new SQLDatabaseUtil(pool as Knex, table)
+      : new NoSQLDatabaseUtil(pool as Model<any>);
   }
 
   async get(

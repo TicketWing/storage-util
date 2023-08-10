@@ -1,16 +1,17 @@
-import mongoose from "mongoose";
+import { Model } from "mongoose";
 import { ErrorHandler } from "./error-handler.util";
 import {
+  DatabaseUtil,
   DeleteDBOptions,
   GetDBOptions,
   InsertDBOptions,
   UpdateDBOptions,
 } from "../types/database.types";
 
-export class NoSQLDatabaseUtil extends ErrorHandler {
-  private model: mongoose.Model<any>;
+export class NoSQLDatabaseUtil extends ErrorHandler implements DatabaseUtil {
+  private model: Model<any>;
 
-  constructor(model: mongoose.Model<any>) {
+  constructor(model: Model<any>) {
     super("Database", 501);
     this.model = model;
   }
@@ -44,8 +45,7 @@ export class NoSQLDatabaseUtil extends ErrorHandler {
   async update<T>(data: T, options: UpdateDBOptions) {
     const update = { $set: data as any };
     const query = this.model.findOneAndUpdate<T>(options.where, update);
-    const result = await this.handler(query, "UPDATE Error");
-    return result;
+    await this.handler(query, "UPDATE Error");
   }
 
   async delete(options: DeleteDBOptions) {
