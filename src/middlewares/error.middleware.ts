@@ -1,9 +1,9 @@
 import { Response } from "express";
-import { CustomError } from "../utils/error.util";
+import { ErrorConstructor } from "../constructors/error.constructor";
 import { ResponseConstructor } from "../constructors/response.constructor";
 
 export const errorMiddleware = (
-  err: Error | CustomError,
+  err: Error | ErrorConstructor,
   _req: any,
   res: Response
 ) => {

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { CustomError } from "../utils/error.util";
+import { ErrorConstructor } from "../constructors/error.constructor";
 import { NextFunction, Request, Response } from "express";
 
 export const validate =
@@ -9,7 +9,7 @@ export const validate =
       const { error } = schema.validate(req.body);
 
       if (error) {
-        throw new CustomError("Validation", "Invalid input", 400);
+        throw new ErrorConstructor("Validation", "Invalid input", 400);
       }
 
       return next();

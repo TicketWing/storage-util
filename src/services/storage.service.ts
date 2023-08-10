@@ -10,20 +10,21 @@ import {
   InsertCacheOptions,
   UpdateCacheOptions,
 } from "../types/cache.types";
-import { Options } from "../constructors/options.constructor";
-import { CacheUtil } from "./cache.util";
-import { CustomError } from "./error.util";
-import { DatabaseUtil } from "./database.util";
 import { Knex } from "knex";
 import { Redis } from "ioredis";
+import { Options } from "../types/options.types";
+import { CacheUtil } from "../utils/cache.util";
+import { SQLDatabaseUtil } from "../utils/sql-database.util";
+import { ErrorConstructor } from "../constructors/error.constructor";
+
 
 export class CacheableSQLStorage {
   private cache: CacheUtil;
-  private database: DatabaseUtil;
+  private database: SQLDatabaseUtil;
 
   constructor(pool: Knex, client: Redis, table: string) {
     this.cache = new CacheUtil(client);
-    this.database = new DatabaseUtil(pool, table);
+    this.database = new SQLDatabaseUtil(pool, table);
   }
 
   async get(
@@ -55,7 +56,7 @@ export class CacheableSQLStorage {
 
     if (cacheOptions) {
       if (!dbOptions.returning.includes(cacheOptions.keyField)) {
-        throw new CustomError("Cache Error", "Missed key", 501);
+        throw new ErrorConstructor("Cache Error", "Missed key", 501);
       }
 
       await this.cache.set(value, cacheOptions);

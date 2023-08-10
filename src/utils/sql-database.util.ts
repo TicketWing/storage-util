@@ -5,26 +5,16 @@ import {
   InsertDBOptions,
   UpdateDBOptions,
 } from "../types/database.types";
-import { CustomError } from "./error.util";
+import { ErrorHandler } from "./error-handler.util";
 
-export class DatabaseUtil {
+export class SQLDatabaseUtil extends ErrorHandler {
   private table: string;
-  private errName = "Database";
-  private errCode = 501;
   private database: Knex;
 
   constructor(pool: Knex, table: string) {
+    super("Database", 501);
     this.database = pool;
     this.table = table;
-  }
-
-  private async handler<T>(promise: Promise<T>, msg: string): Promise<T> {
-    try {
-      const result = await promise;
-      return result;
-    } catch (error) {
-      throw new CustomError(this.errName, msg, this.errCode);
-    }
   }
 
   async get(options: GetDBOptions) {
@@ -38,7 +28,7 @@ export class DatabaseUtil {
 
   async insert<T>(data: T, options: InsertDBOptions): Promise<any> {
     const query = this.database(this.table)
-      .returning(options.returning || ['id'])
+      .returning(options.returning || ["id"])
       .insert(data);
     const inserted = await this.handler(query, "INSERT Error");
     return inserted[0];

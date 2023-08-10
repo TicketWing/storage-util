@@ -1,29 +1,19 @@
-import { Redis } from "ioredis";
 import {
-  DeleteCacheOptions,
   GetCacheOptions,
   InsertCacheOptions,
+  DeleteCacheOptions,
   UpdateCacheOptions,
 } from "../types/cache.types";
-import { CustomError } from "./error.util";
+import { Redis } from "ioredis";
 import { RedisUtil } from "./redis.util";
+import { ErrorHandler } from "./error-handler.util";
 
-export class CacheUtil {
+export class CacheUtil extends ErrorHandler {
   private redis: RedisUtil;
-  private errCode = 500;
-  private errName = "Redis Error";
 
   constructor(client: Redis) {
+    super("Cache", 501);
     this.redis = new RedisUtil(client);
-  }
-
-  private async handler<T>(promise: Promise<T>, msg: string): Promise<T> {
-    try {
-      const result = await promise;
-      return result;
-    } catch (error) {
-      throw new CustomError(this.errName, msg, this.errCode);
-    }
   }
 
   private includeInCache<T>(obj: T, fields: string[]) {

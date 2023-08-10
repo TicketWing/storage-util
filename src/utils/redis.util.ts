@@ -1,5 +1,5 @@
 import { Redis } from "ioredis";
-import { CustomError } from "./error.util";
+import { ErrorConstructor } from "../constructors/error.constructor";
 
 export class RedisUtil {
   private client: Redis;
@@ -29,7 +29,7 @@ export class RedisUtil {
     const record = await this.get<any>(key);
 
     if (!record) {
-      throw new CustomError(this.errName, "Does not exist", this.errCode);
+      throw new ErrorConstructor(this.errName, "Does not exist", this.errCode);
     }
 
     for (const field in data) {

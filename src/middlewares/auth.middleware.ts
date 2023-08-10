@@ -1,7 +1,7 @@
 import passport from "passport";
-import { CustomError } from "../utils/error.util";
 import { NextFunction, Response } from "express";
 import { Identification } from "../types/middlewares.types";
+import { ErrorConstructor } from "../constructors/error.constructor";
 
 export const authenticate = (req: any, res: Response, next: NextFunction) => {
   passport.authenticate(
@@ -13,12 +13,12 @@ export const authenticate = (req: any, res: Response, next: NextFunction) => {
       }
 
       if (!data) {
-        const error = new CustomError("Token", "Wrong token", 401);
+        const error = new ErrorConstructor("Token", "Wrong token", 401);
         return next(error);
       }
 
       if (info && info.name === "TokenExpiredError") {
-        const error = new CustomError("Token", "Expired", 401);
+        const error = new ErrorConstructor("Token", "Expired", 401);
         return next(error);
       }
 
