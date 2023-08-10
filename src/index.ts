@@ -11,7 +11,7 @@ export {
   UpdateCacheOptions,
 } from "./types/cache.types";
 export { Identification } from "./types/middlewares.types";
-export { CacheableSQLStorage } from "./utils/storage_sql.util";
+export { CacheableStorage} from "./services/storage.service"
 export { StorageRequestBuilder } from "./constructors/storage-request.constructor";
 export { validate } from "./middlewares/validate.middleware";
 export { errorMiddleware } from "./middlewares/error.middleware";

@@ -20,7 +20,7 @@ import { ErrorConstructor } from "../constructors/error.constructor";
 import { NoSQLDatabaseUtil } from "../utils/nosql-database.util";
 import { Model } from "mongoose";
 
-export class CacheableSQLStorage {
+export class CacheableStorage {
   private cache: CacheUtil;
   private database: DatabaseUtil; 
 
