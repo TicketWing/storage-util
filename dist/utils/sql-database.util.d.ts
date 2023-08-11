@@ -1,12 +1,10 @@
 import { Knex } from "knex";
-import { DeleteDBOptions, GetDBOptions, InsertDBOptions, UpdateDBOptions } from "../types/database.types";
-export declare class DatabaseUtil {
+import { DatabaseUtil, DeleteDBOptions, GetDBOptions, InsertDBOptions, UpdateDBOptions } from "../types/database.types";
+import { ErrorHandler } from "./error-handler.util";
+export declare class SQLDatabaseUtil extends ErrorHandler implements DatabaseUtil {
     private table;
-    private errName;
-    private errCode;
-    private database;
+    private pool;
     constructor(pool: Knex, table: string);
-    private handler;
     get(options: GetDBOptions): Promise<any>;
     insert<T>(data: T, options: InsertDBOptions): Promise<any>;
     update<T>(data: T, options: UpdateDBOptions): Promise<void>;

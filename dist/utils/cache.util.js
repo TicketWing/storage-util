@@ -1,23 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheUtil = void 0;
-const error_util_1 = require("./error.util");
 const redis_util_1 = require("./redis.util");
-class CacheUtil {
+const error_handler_util_1 = require("./error-handler.util");
+class CacheUtil extends error_handler_util_1.ErrorHandler {
     redis;
-    errCode = 500;
-    errName = "Redis Error";
     constructor(client) {
+        super("Cache", 501);
         this.redis = new redis_util_1.RedisUtil(client);
-    }
-    async handler(promise, msg) {
-        try {
-            const result = await promise;
-            return result;
-        }
-        catch (error) {
-            throw new error_util_1.CustomError(this.errName, msg, this.errCode);
-        }
     }
     includeInCache(obj, fields) {
         const result = {};

@@ -1,3 +1,3 @@
 import { Response } from "express";
-import { CustomError } from "../utils/error.util";
-export declare const errorMiddleware: (err: Error | CustomError, _req: any, res: Response) => void;
+import { ErrorConstructor } from "../constructors/error.constructor";
+export declare const errorMiddleware: (err: Error | ErrorConstructor, _req: any, res: Response) => void;

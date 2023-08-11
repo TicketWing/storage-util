@@ -1,18 +1,24 @@
-export declare type WhereClause = {
+export interface DatabaseUtil {
+    get(options: GetDBOptions): Promise<any>;
+    insert<T>(data: T, options: InsertDBOptions): Promise<any>;
+    update<T>(data: T, options: UpdateDBOptions): Promise<void>;
+    delete(options: DeleteDBOptions): Promise<void>;
+}
+export type WhereClause = {
     [key: string]: string;
 };
-export declare type Selectoption = string[];
-export declare type ReturningMethod = string[];
-export declare type GetDBOptions = {
+export type Selectoption = string[];
+export type ReturningMethod = string[];
+export type GetDBOptions = {
     where: WhereClause;
     select: Selectoption;
 };
-export declare type InsertDBOptions = {
+export type InsertDBOptions = {
     returning: ReturningMethod;
 };
-export declare type UpdateDBOptions = {
+export type UpdateDBOptions = {
     where: WhereClause;
 };
-export declare type DeleteDBOptions = {
+export type DeleteDBOptions = {
     where: WhereClause;
 };

@@ -1,4 +1,4 @@
-export declare type Identification = {
+export type Identification = {
     id: string;
     email: string;
 };

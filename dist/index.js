@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticate = exports.errorMiddleware = exports.validate = exports.OptionsBuilder = exports.CacheableSQLStorage = void 0;
-var storage_sql_util_1 = require("./utils/storage_sql.util");
-Object.defineProperty(exports, "CacheableSQLStorage", { enumerable: true, get: function () { return storage_sql_util_1.CacheableSQLStorage; } });
-var options_util_1 = require("./utils/options.util");
-Object.defineProperty(exports, "OptionsBuilder", { enumerable: true, get: function () { return options_util_1.OptionsBuilder; } });
+exports.authenticate = exports.errorMiddleware = exports.validate = exports.StorageRequestBuilder = exports.CacheableStorage = void 0;
+var storage_service_1 = require("./services/storage.service");
+Object.defineProperty(exports, "CacheableStorage", { enumerable: true, get: function () { return storage_service_1.CacheableStorage; } });
+var storage_request_constructor_1 = require("./constructors/storage-request.constructor");
+Object.defineProperty(exports, "StorageRequestBuilder", { enumerable: true, get: function () { return storage_request_constructor_1.StorageRequestBuilder; } });
 var validate_middleware_1 = require("./middlewares/validate.middleware");
 Object.defineProperty(exports, "validate", { enumerable: true, get: function () { return validate_middleware_1.validate; } });
 var error_middleware_1 = require("./middlewares/error.middleware");

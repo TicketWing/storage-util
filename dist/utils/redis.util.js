@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RedisUtil = void 0;
-const error_util_1 = require("./error.util");
+const error_constructor_1 = require("../constructors/error.constructor");
 class RedisUtil {
     client;
     errCode = 501;
@@ -23,7 +23,7 @@ class RedisUtil {
     async update(key, data) {
         const record = await this.get(key);
         if (!record) {
-            throw new error_util_1.CustomError(this.errName, "Does not exist", this.errCode);
+            throw new error_constructor_1.ErrorConstructor(this.errName, "Does not exist", this.errCode);
         }
         for (const field in data) {
             if (record[field] !== undefined) {

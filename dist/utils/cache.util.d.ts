@@ -1,11 +1,9 @@
+import { GetCacheOptions, InsertCacheOptions, DeleteCacheOptions, UpdateCacheOptions } from "../types/cache.types";
 import { Redis } from "ioredis";
-import { DeleteCacheOptions, GetCacheOptions, InsertCacheOptions, UpdateCacheOptions } from "../types/cache.types";
-export declare class CacheUtil {
+import { ErrorHandler } from "./error-handler.util";
+export declare class CacheUtil extends ErrorHandler {
     private redis;
-    private errCode;
-    private errName;
     constructor(client: Redis);
-    private handler;
     private includeInCache;
     get(options: GetCacheOptions): Promise<any>;
     set(data: any, options: InsertCacheOptions): Promise<void>;

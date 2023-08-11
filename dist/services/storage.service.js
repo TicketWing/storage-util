@@ -1,15 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CacheableSQLStorage = void 0;
-const cache_util_1 = require("./cache.util");
-const error_util_1 = require("./error.util");
-const database_util_1 = require("./database.util");
-class CacheableSQLStorage {
+exports.CacheableStorage = void 0;
+const cache_util_1 = require("../utils/cache.util");
+const sql_database_util_1 = require("../utils/sql-database.util");
+const error_constructor_1 = require("../constructors/error.constructor");
+const nosql_database_util_1 = require("../utils/nosql-database.util");
+class CacheableStorage {
     cache;
     database;
-    constructor(pool, client, table) {
+    constructor(pool, client, table = undefined) {
         this.cache = new cache_util_1.CacheUtil(client);
-        this.database = new database_util_1.DatabaseUtil(pool, table);
+        this.database = table
+            ? new sql_database_util_1.SQLDatabaseUtil(pool, table)
+            : new nosql_database_util_1.NoSQLDatabaseUtil(pool);
     }
     async get(options) {
         const { dbOptions, cacheOptions } = options;
@@ -30,7 +33,7 @@ class CacheableSQLStorage {
         const value = await this.database.insert(data, dbOptions);
         if (cacheOptions) {
             if (!dbOptions.returning.includes(cacheOptions.keyField)) {
-                throw new error_util_1.CustomError("Cache Error", "Missed key", 501);
+                throw new error_constructor_1.ErrorConstructor("Cache Error", "Missed key", 501);
             }
             await this.cache.set(value, cacheOptions);
         }
@@ -51,4 +54,4 @@ class CacheableSQLStorage {
         }
     }
 }
-exports.CacheableSQLStorage = CacheableSQLStorage;
+exports.CacheableStorage = CacheableStorage;
