@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticate = exports.errorMiddleware = exports.validate = exports.StorageRequestBuilder = exports.CacheableStorage = void 0;
+exports.authenticate = exports.errorMiddleware = exports.validate = exports.StorageRequestBuilder = exports.CacheableStorage = exports.ErrorHandler = void 0;
+var error_handler_util_1 = require("./utils/error-handler.util");
+Object.defineProperty(exports, "ErrorHandler", { enumerable: true, get: function () { return error_handler_util_1.ErrorHandler; } });
 var storage_service_1 = require("./services/storage.service");
 Object.defineProperty(exports, "CacheableStorage", { enumerable: true, get: function () { return storage_service_1.CacheableStorage; } });
 var storage_request_constructor_1 = require("./constructors/storage-request.constructor");
