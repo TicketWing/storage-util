@@ -1,7 +1,8 @@
 import passport from "passport";
 import { NextFunction, Response } from "express";
-import { Identification } from "../types/middlewares.types";
+import { Identification } from "../types/passport.types";
 import { ErrorConstructor } from "../constructors/error.constructor";
+
 
 export const authenticate = (req: any, res: Response, next: NextFunction) => {
   passport.authenticate(
