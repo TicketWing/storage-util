@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticate = exports.errorMiddleware = exports.validate = exports.CacheableStorage = exports.ErrorHandler = exports.StorageRequestBuilder = exports.ErrorConstructor = exports.ResponseConstructor = void 0;
+exports.authenticate = exports.errorMiddleware = exports.validate = exports.applyPassportStrategy = exports.CacheableStorage = exports.ErrorHandler = exports.StorageRequestBuilder = exports.ErrorConstructor = exports.ResponseConstructor = void 0;
 //Constructors and builders
 var response_constructor_1 = require("./constructors/response.constructor");
 Object.defineProperty(exports, "ResponseConstructor", { enumerable: true, get: function () { return response_constructor_1.ResponseConstructor; } });
@@ -13,6 +13,8 @@ var error_handler_util_1 = require("./utils/error-handler.util");
 Object.defineProperty(exports, "ErrorHandler", { enumerable: true, get: function () { return error_handler_util_1.ErrorHandler; } });
 var storage_service_1 = require("./services/storage.service");
 Object.defineProperty(exports, "CacheableStorage", { enumerable: true, get: function () { return storage_service_1.CacheableStorage; } });
+var passport_util_1 = require("./utils/passport.util");
+Object.defineProperty(exports, "applyPassportStrategy", { enumerable: true, get: function () { return passport_util_1.applyPassportStrategy; } });
 //Middlewares
 var validate_middleware_1 = require("./middlewares/validate.middleware");
 Object.defineProperty(exports, "validate", { enumerable: true, get: function () { return validate_middleware_1.validate; } });

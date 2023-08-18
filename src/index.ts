@@ -21,6 +21,7 @@ export { StorageRequestBuilder } from "./constructors/storage-request.constructo
 //Services and Utils
 export { ErrorHandler } from "./utils/error-handler.util";
 export { CacheableStorage } from "./services/storage.service";
+export { applyPassportStrategy } from "./utils/passport.util";
 
 //Middlewares
 export { validate } from "./middlewares/validate.middleware";
